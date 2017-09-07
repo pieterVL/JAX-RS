@@ -7,16 +7,24 @@ import javax.ws.rs.core.*;
 import javax.json.*;
 import javax.servlet.ServletContext;
 
-@Path("/products")
-public class ProductResource {
+@Path("/movies")
+public class movies {
 	
 	private String FILE;
 	
-	public ProductResource(@Context ServletContext servletContext) {
-		//System.out.println("Hallokes");		
+	public movies(@Context ServletContext servletContext) {
+		System.out.println("Hallokes");		
 		FILE = servletContext.getInitParameter("FILE_PATH");
 	}
-	
+	@GET
+	@Path("{id}")
+	@Produces({"application/json"})
+	public String getProductJSON(@PathParam("id") String id) {
+		String jsonString = "";
+		
+		
+		return jsonString;
+	}
 	/*@GET
 	@Produces({"text/html"})
 	public String getProductsHTML() {
@@ -92,33 +100,7 @@ public class ProductResource {
 		return jsonString;
 	}
 	
-	@GET
-	@Path("{id}")
-	@Produces({"application/json"})
-	public String getProductJSON(@PathParam("id") String id) {
-		String jsonString = "";
-		try {
-			InputStream fis = new FileInputStream(FILE);
-	        JsonReader reader = Json.createReader(fis);
-	        JsonObject jsonObject = reader.readObject();
-	        reader.close();
-	        fis.close();
-	        
-	        JsonArray array = jsonObject.getJsonArray("products");
-	        for(int i = 0; i < array.size(); i++) {
-	        	JsonObject obj = array.getJsonObject(i);
-	        	if(obj.getString("id").equalsIgnoreCase(id)) {
-	            	jsonString = obj.toString();
-	            	break;
-	            }
-	        }
-		} 
-		catch (Exception ex) {
-			jsonString = ex.getMessage();
-		}
-		
-		return jsonString;
-	}
+	
 	
 	@GET
 	@Path("/add")
