@@ -30,19 +30,16 @@ public class movies {
 		if(js != ""){
 			jsonString = js;
 		}else{
-			jsonString = "{movie:not found}";	
+			jsonString = "";	
 			try {
+				
 			URL url = new URL("http://www.omdbapi.com/?t="+id+"l&apikey=plzBanMe");
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		      conn.setRequestMethod("GET");
-		      BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		      
-		     JsonReader jsonReader;
-			
-			jsonReader = Json.createReader(new InputStreamReader(conn.getInputStream()));
-			JsonObject jsonObject = jsonReader.readObject();
+
 			} catch (IOException e) {
-				e.printStackTrace();
+				return "{movie:not found}";
 			}			 
 			
 			jedis.set(id, jsonString);
