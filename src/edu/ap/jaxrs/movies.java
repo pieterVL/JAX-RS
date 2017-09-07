@@ -37,7 +37,15 @@ public class movies {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		      conn.setRequestMethod("GET");
 		      
-
+		     JsonReader jsonReader;
+			
+			jsonReader = Json.createReader(new InputStreamReader(conn.getInputStream()));
+			JsonObject jsonObject = jsonReader.readObject();
+			
+			String year = jsonObject.getString("Year");
+			String director = jsonObject.getString("Director");
+			
+			jsonString = "{year:"+year+",director:"+director+"}";
 			} catch (IOException e) {
 				return "{movie:not found}";
 			}			 
