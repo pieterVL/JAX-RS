@@ -1,27 +1,53 @@
 package edu.ap.jaxrs;
 
 import java.io.*;
+import java.net.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import redis.clients.jedis.Jedis;
+
 import javax.json.*;
 import javax.servlet.ServletContext;
 
 @Path("/movies")
 public class movies {
 	
-	private String FILE;
+	Jedis jedis;
 	
-	public movies(@Context ServletContext servletContext) {
-		System.out.println("Hallokes");		
-		FILE = servletContext.getInitParameter("FILE_PATH");
+	public movies(@Context ServletContext servletContext) {	
+		jedis = new Jedis("localhost");
 	}
+	
 	@GET
 	@Path("{id}")
 	@Produces({"application/json"})
-	public String getProductJSON(@PathParam("id") String id) {
-		String jsonString = "";
+	public String getMovieJSON(@PathParam("id") String id) {
 		
+		String jsonString = "";
+		String js = jedis.get(id);
+		if(js != ""){
+			jsonString = js;
+		}else{
+			jsonString = "{movie:not found}";	
+			try {
+			URL url = new URL("http://www.omdbapi.com/?t="+id+"l&apikey=plzBanMe");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		      conn.setRequestMethod("GET");
+		      BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		      
+		     JsonReader jsonReader;
+			
+			jsonReader = Json.createReader(new InputStreamReader(conn.getInputStream()));
+			JsonObject jsonObject = jsonReader.readObject();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			 
+			
+			jedis.set(id, jsonString);
+		}
+			
 		
 		return jsonString;
 	}
@@ -80,7 +106,7 @@ public class movies {
 		return htmlString + "</body></html>";
 	}*/
 	
-	@GET
+	/*@GET
 	@Produces({"application/json"})
 	public String getProductsJSON() {
 		String jsonString = "";
@@ -98,11 +124,11 @@ public class movies {
 		}
 		
 		return jsonString;
-	}
+	}*/
 	
 	
 	
-	@GET
+	/*@GET
 	@Path("/add")
 	@Produces("text/html")
 	public String getProductForm() {
@@ -216,5 +242,5 @@ public class movies {
 		}
 		
 		return Response.seeOther(location).build();
-	}
+	}*/
 }

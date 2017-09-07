@@ -36,5 +36,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/persistence-api-1.0.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="C:/school/ExamenWebtech/jedis-jedis-2.9.0.zip"/>
+	<classpathentry kind="lib" path="C:/school/ExamenWebtech/jedis-2.4.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
